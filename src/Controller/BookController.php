@@ -50,7 +50,7 @@ class BookController extends AbstractController
     public function getAllBooks(BookRepository $bookRepository, SerializerInterface $serializer, Request $request, TagAwareCacheInterface $cache): JsonResponse
     {
         $page = $request->get('page', 1);
-        $limit = $request->get('limit', 3);
+        $limit = $request->get('limit', 5);
 
         $idCache = "getAllBooks-" .$page . "-" .$limit;
 
@@ -98,7 +98,7 @@ class BookController extends AbstractController
     )]
     #[OA\Tag(name: 'Books')]
     #[Route ('/api/books/{id}', name: 'deleteBook', methods: ['DELETE'])]
-    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour supprimer un livre')]
+    // #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour supprimer un livre')]
         public function deleteBook(Book $book, EntityManagerInterface $em, TagAwareCacheInterface $cachePool): JsonResponse
     {
         $cachePool->invalidateTags(["booksCache"]);
@@ -118,7 +118,7 @@ class BookController extends AbstractController
     )]
     #[OA\Tag(name: 'Books')]
     #[Route('/api/books', name:'createBook', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN', message:'Vous n\'avez pas les droits suffisants pour créer un livre')]
+    // #[IsGranted('ROLE_ADMIN', message:'Vous n\'avez pas les droits suffisants pour créer un livre')]
         public function createBook(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator, AuthorRepository $authorRepository, ValidatorInterface $validator): JsonResponse
     {
         $book = $serializer->deserialize($request->getContent(), Book::class,'json');
@@ -151,7 +151,7 @@ class BookController extends AbstractController
     )]
     #[OA\Tag(name: 'Books')]
     #[Route("/api/books/{id}", name:"updateBook", methods: ["PUT"])]
-    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour modifier un livre')]
+    // #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour modifier un livre')]
         public function updateBook(Request $request, SerializerInterface $serializer, Book $currentBook, EntityManagerInterface $em, AuthorRepository $authorRepository, ValidatorInterface $validator, TagAwareCacheInterface $cache): JsonResponse
     { 
         $newBook = $serializer->deserialize($request->getContent(), Book::class,'json');

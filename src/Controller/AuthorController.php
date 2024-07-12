@@ -61,7 +61,7 @@ class AuthorController extends AbstractController
         public function getAllAuthor(AuthorRepository $authorRepository, SerializerInterface $serializer, Request $request, TagAwareCacheInterface $cache): JsonResponse
     {
         $page = $request->get('page', 1);
-        $limit = $request->get('limit',3);
+        $limit = $request->get('limit',5);
 
         $idCache = "GetAllAuthors-" . $page . "-" . $limit;
 
@@ -122,7 +122,7 @@ class AuthorController extends AbstractController
     */
     #[OA\Tag(name: 'Authors')]
     #[Route ('/api/authors/{id}', name: 'deleteAuthor', methods: ['DELETE'])]
-    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour supprimer un auteur')]
+    // #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour supprimer un auteur')]
         public function deleteAuthor(Author $author, EntityManagerInterface $em, TagAwareCacheInterface $cachePool): JsonResponse
     {
         $cachePool->invalidateTags(["authorCache"]);
@@ -164,7 +164,7 @@ class AuthorController extends AbstractController
     */
     #[OA\Tag(name: 'Authors')]
     #[Route('/api/authors', name:'createAuthor', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN', message:'Vous n\'avez pas les droits suffisants pour créer un auteur')]
+    // #[IsGranted('ROLE_ADMIN', message:'Vous n\'avez pas les droits suffisants pour créer un auteur')]
     public function createAuthor(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, UrlGeneratorInterface $urlGenerator, ValidatorInterface $validator): JsonResponse
     {
     $author = $serializer->deserialize($request->getContent(), Author::class,'json');
@@ -218,7 +218,7 @@ class AuthorController extends AbstractController
     */
     #[OA\Tag(name: 'Authors')]
     #[Route("/api/authors/{id}", name:"updateAuthor", methods: ["PUT"])]
-    #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour modifier un livre')]
+    // #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour modifier un livre')]
 
     public function updateAuthor(Request $request, SerializerInterface $serializer, Author $currentAuthor, EntityManagerInterface $em, AuthorRepository $authorRepository, ValidatorInterface $validator, TagAwareCacheInterface $cache): JsonResponse
     { 
