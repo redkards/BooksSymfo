@@ -64,9 +64,11 @@ class AuthorController extends AbstractController
         $limit = $request->get('limit',15);
 
         $idCache = "GetAllAuthors-" . $page . "-" . $limit;
+        $cache->invalidateTags(["authorCache"]);
 
         $jsonAuthorList = $cache->get($idCache, function (ItemInterface $item) use ($authorRepository, $page, $limit, $serializer){
             $item->tag("authorsCache");
+
 
             $authorList = $authorRepository->findAllWithPagination($page, $limit);
             $context = SerializationContext::create()->setGroups(['getAuthors']);
@@ -125,10 +127,11 @@ class AuthorController extends AbstractController
     // #[IsGranted('ROLE_ADMIN', message: 'Vous n\'avez pas les droits suffisants pour supprimer un auteur')]
         public function deleteAuthor(Author $author, EntityManagerInterface $em, TagAwareCacheInterface $cachePool): JsonResponse
     {
-        $cachePool->invalidateTags(["authorCache"]);
         $em->remove($author);
         $em->flush();
-
+        
+        $cachePool->invalidateTags(["authorCache"]);
+        
     return new JsonResponse(null, Response::HTTP_NO_CONTENT);
     }
     /**
